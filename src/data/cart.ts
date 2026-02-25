@@ -1,0 +1,4 @@
+export const cartItems = [
+  { name: "Artisan Ceramic Vase", variant: "Matte Sage", price: 85, quantity: 1, image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBYHpe0NamUhRPyreIUg-WCarGVHBuDK26-_FESoJ-ERXESh8cjWV_TYMbw5RKnrMHXqUAPrAXqUgN2VrsaZFabkMWvwa77oSAxBb1CC_-bI0I771u9bG3i-mLhYEIlo1qCoqJXabpMMDgoJmCd7DVo18VE4h6SflqVvCYGlnwFx07xGLplqENwjFz0-7uhfsTrotWxwmUIHxB4IQBZhxrp4OOdSGBlIGs1_hvRfxsBXtSc23-RogtWdLgOrjVFHWG1veWaxMUGgtwW" },
+  { name: "Organic Linen Throw", variant: "Warm Cream", price: 120, quantity: 2, image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDmQ7gLxWhBY1cst52f38F3B7xYb8GOiSUgDxi40l0l2RMCIKXwPpjIbWj9EMyJzrY5hhm6qdSXyOKzdKHLFQPH4V6cCBL5gpP4sQ2KKVjVCOgvgkRmgZGBMMuawKo7kjX5mCvhOwRacq3CObBn4IqNm4iNrrLI9I6mZp3ZSGMcVIqU1miZ6qmPZ2WgBFFpzFCIlgJ_lF3s62u-aL2iM2qP7GJnSTXqEZr-TZ4rhqehYKQO1YnaQN9Nc1FZjP5qqQXrEyPUkxpMR4IX" },
+];
