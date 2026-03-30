@@ -1,18 +1,32 @@
 import { products } from "@/data/catalog";
+import { getCategoryBySlug, productMatchesCategory } from "@/features/catalog/categories";
+import type { ProductFilters } from "@/features/catalog/product.types";
+
+function matchesProductFilters(product: (typeof products)[number], filters?: ProductFilters) {
+  if (!filters) return true;
+  if (filters.category && product.category !== filters.category) return false;
+  if (filters.status && product.status !== filters.status) return false;
+  return true;
+}
 
 export async function listFeaturedProducts() {
-  return products.slice(0, 3);
+  return products.filter((product) => product.status === "active").slice(0, 3);
+}
+
+export async function listProducts(filters?: ProductFilters) {
+  return products.filter((product) => matchesProductFilters(product, filters));
 }
 
 export async function listLinenProducts() {
-  return products.filter((product) => product.category === "Linen");
+  return listProducts({ status: "active", category: "Linen" });
 }
 
-export async function getArtisanLinenShirt() {
-  return {
-    name: "Artisan Linen Shirt",
-    price: 145,
-    description:
-      "Crafted from ethically sourced, 100% organic linen. This piece is designed for fluid movement and breathless comfort, embodying a quiet luxury that transitions effortlessly through seasons.",
-  };
+export async function listCategoryProducts(slug: string) {
+  const category = getCategoryBySlug(slug);
+  if (!category) return [];
+  return products.filter((product) => product.status === "active" && productMatchesCategory(product, category));
+}
+
+export async function getProductBySlug(slug: string) {
+  return products.find((product) => product.slug === slug && product.status === "active") ?? null;
 }

@@ -134,16 +134,7 @@ body {
   --color-on-tertiary-container: #fffbff;
 }
 
-.theme-admin {
-  --font-display-lg: "Libre Caslon Text", serif;
-  --font-display-lg-mobile: "Libre Caslon Text", serif;
-  --font-headline-md: "Libre Caslon Text", serif;
-  --font-headline-sm: "Libre Caslon Text", serif;
-  --font-body-md: "DM Sans", sans-serif;
-  --font-body-lg: "DM Sans", sans-serif;
-  --font-label-caps: "DM Sans", sans-serif;
-  --font-button: "DM Sans", sans-serif;
-}
+.theme-admin { font-family: Inter, sans-serif; }
 
 .material-symbols-outlined {
   font-family: "Material Symbols Outlined";
