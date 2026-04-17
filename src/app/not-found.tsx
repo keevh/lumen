@@ -17,8 +17,8 @@ export default function NotFound() {
             <Link className="inline-flex items-center justify-center bg-primary text-on-primary font-button text-button px-8 py-4 rounded-full hover:bg-surface-tint transition-colors" href="/">
               Volver al inicio
             </Link>
-            <Link className="inline-flex items-center justify-center ghost-outline font-button text-button px-8 py-4 rounded-full" href="/categorias/camisas">
-              Ver colecciones
+            <Link className="inline-flex items-center justify-center rounded-full ghost-outline px-8 py-4 font-button text-button transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-variant active:translate-y-0 active:scale-[0.99]" href="/categorias">
+              Ver categorías
             </Link>
           </div>
         </section>

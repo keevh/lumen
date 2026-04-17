@@ -38,7 +38,7 @@ export default async function UnderConstructionPage({ params }: { params: Promis
             Estamos preparando esta sección para que mantenga la experiencia serena y cuidada de LUMEN. Mientras tanto, puedes explorar nuestras categorías.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link className="inline-flex items-center justify-center bg-primary text-on-primary font-button text-button px-8 py-4 rounded-full hover:bg-surface-tint transition-colors" href="/categorias/camisas">
+            <Link className="inline-flex items-center justify-center rounded-full bg-primary px-8 py-4 font-button text-button text-on-primary transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-tint active:translate-y-0 active:scale-[0.99]" href="/categorias">
               Ver categorías
             </Link>
             <Link className="inline-flex items-center justify-center ghost-outline font-button text-button px-8 py-4 rounded-full" href="/">

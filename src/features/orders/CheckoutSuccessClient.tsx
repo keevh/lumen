@@ -19,7 +19,7 @@ export function CheckoutSuccessClient() {
           <h1 className="font-headline-md text-headline-md text-on-surface mb-3">Pedido confirmado</h1>
           <p className="font-body-lg text-body-lg text-on-surface-variant mb-4">Gracias por tu compra. Registramos tu pedido correctamente.</p>
           {orderId ? <p className="font-body-md text-body-md text-on-surface-variant mb-8">Número de pedido: <span className="text-on-surface">{orderId}</span></p> : null}
-          <Link className="inline-flex bg-primary text-on-primary px-6 py-3 rounded font-label-md text-label-md uppercase tracking-widest hover:bg-primary-container transition-colors" href="/categorias/camisas">
+          <Link className="inline-flex rounded bg-primary px-6 py-3 font-label-md text-label-md uppercase tracking-widest text-on-primary transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary-container active:translate-y-0 active:scale-[0.99]" href="/categorias">
             Seguir comprando
           </Link>
         </section>

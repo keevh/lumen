@@ -74,7 +74,7 @@ export function CartClient() {
       <main className="flex-grow pt-[100px] pb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
         <div className="mb-12">
           <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-2">Tu carrito</h1>
-          <p className="font-body-lg text-body-lg text-on-surface-variant">Revisá los productos seleccionados antes de continuar.</p>
+          <p className="font-body-lg text-body-lg text-on-surface-variant">Revisa los productos seleccionados antes de continuar.</p>
         </div>
 
         {error ? <p className="mb-6 rounded bg-error-container px-4 py-3 text-on-error-container" role="alert">{error}</p> : null}
@@ -125,7 +125,7 @@ export function CartClient() {
                   <span className="font-headline-sm text-headline-sm text-on-surface">Total</span>
                   <span className="font-headline-sm text-headline-sm text-primary">{formatMoney(cart.total)}</span>
                 </div>
-                <Link className="w-full bg-primary text-on-primary py-4 rounded flex items-center justify-center gap-2 font-label-md text-label-md uppercase tracking-widest hover:bg-primary-container transition-colors" href="/pago">
+                <Link className="flex w-full items-center justify-center gap-2 rounded bg-primary py-4 font-label-md text-label-md uppercase tracking-widest text-on-primary transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary-container active:translate-y-0 active:scale-[0.99]" href="/pago">
                   Continuar al pago <Icon name="arrow_forward" />
                 </Link>
               </div>
@@ -135,9 +135,9 @@ export function CartClient() {
           <section className="lumen-card p-8 md:p-12 text-center max-w-2xl mx-auto">
             <Icon name="shopping_bag" className="text-5xl text-primary mb-4" />
             <h2 className="font-headline-md text-headline-md text-on-surface mb-3">Tu carrito está vacío</h2>
-            <p className="font-body-md text-body-md text-on-surface-variant mb-8">Explorá la colección y agregá prendas para iniciar tu pedido.</p>
-            <Link className="inline-flex bg-primary text-on-primary px-6 py-3 rounded font-label-md text-label-md uppercase tracking-widest hover:bg-primary-container transition-colors" href="/categorias/camisas">
-              Ver colección
+            <p className="font-body-md text-body-md text-on-surface-variant mb-8">Explora la colección y agrega prendas para iniciar tu pedido.</p>
+            <Link className="inline-flex rounded bg-primary px-6 py-3 font-label-md text-label-md uppercase tracking-widest text-on-primary transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary-container active:translate-y-0 active:scale-[0.99]" href="/categorias">
+              Ver categorías
             </Link>
           </section>
         )}

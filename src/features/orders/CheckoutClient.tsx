@@ -97,13 +97,13 @@ export function CheckoutClient() {
 
   function validateDraft() {
     const nextErrors: DraftErrors = {};
-    if (!/^\S+@\S+\.\S+$/.test(draft.email)) nextErrors.email = "Ingresá un email válido.";
-    if (!draft.firstName.trim()) nextErrors.firstName = "Ingresá tu nombre.";
-    if (!draft.lastName.trim()) nextErrors.lastName = "Ingresá tu apellido.";
-    if (!draft.address.trim()) nextErrors.address = "Ingresá una dirección.";
-    if (!draft.city.trim()) nextErrors.city = "Ingresá una ciudad.";
-    if (!draft.zip.trim()) nextErrors.zip = "Ingresá un código postal.";
-    if (!draft.phone.trim()) nextErrors.phone = "Ingresá un teléfono.";
+    if (!/^\S+@\S+\.\S+$/.test(draft.email)) nextErrors.email = "Ingresa un correo electrónico válido.";
+    if (!draft.firstName.trim()) nextErrors.firstName = "Ingresa tu nombre.";
+    if (!draft.lastName.trim()) nextErrors.lastName = "Ingresa tu apellido.";
+    if (!draft.address.trim()) nextErrors.address = "Ingresa una dirección.";
+    if (!draft.city.trim()) nextErrors.city = "Ingresa una ciudad.";
+    if (!draft.zip.trim()) nextErrors.zip = "Ingresa un código postal.";
+    if (!draft.phone.trim()) nextErrors.phone = "Ingresa un teléfono.";
     if (!draft.paymentMethod) nextErrors.paymentMethod = "Selecciona un medio de pago.";
 
     setErrors(nextErrors);
@@ -115,7 +115,7 @@ export function CheckoutClient() {
     setSubmitError("");
 
     if (cart.items.length === 0) {
-      setSubmitError("Tu carrito está vacío. Agregá productos antes de pagar.");
+      setSubmitError("Tu carrito está vacío. Agrega productos antes de pagar.");
       return;
     }
 
@@ -156,7 +156,7 @@ export function CheckoutClient() {
       sessionStorage.removeItem(checkoutDraftKey);
       router.push(`/pago/exito?order=${order.id}`);
     } catch {
-      setSubmitError("No pudimos registrar el pedido. Revisá los datos e intentá nuevamente.");
+      setSubmitError("No pudimos registrar el pedido. Revisa los datos e inténtalo nuevamente.");
       setIsSubmitting(false);
     }
   }
@@ -173,7 +173,7 @@ export function CheckoutClient() {
       <main className="flex-grow pt-32 pb-section-gap px-margin-mobile md:px-margin-desktop w-full max-w-container-max mx-auto">
         <div className="mb-12">
           <h1 className="font-headline-md text-headline-md text-on-background mb-2">Finalizar compra</h1>
-          <p className="font-body-md text-on-surface-variant">Completá tus datos para crear el pedido.</p>
+          <p className="font-body-md text-on-surface-variant">Completa tus datos para crear el pedido.</p>
         </div>
 
         {isLoading ? (
@@ -241,8 +241,8 @@ export function CheckoutClient() {
           <section className="lumen-card p-8 md:p-12 text-center max-w-2xl mx-auto">
             <Icon name="shopping_bag" className="text-5xl text-primary mb-4" />
             <h2 className="font-headline-md text-headline-md text-on-surface mb-3">No hay productos para pagar</h2>
-            <p className="font-body-md text-body-md text-on-surface-variant mb-8">Agregá productos al carrito para continuar con la compra.</p>
-            <Link className="inline-flex bg-primary text-on-primary px-6 py-3 rounded font-label-md text-label-md uppercase tracking-widest hover:bg-primary-container transition-colors" href="/categorias/camisas">Ver categorías</Link>
+            <p className="font-body-md text-body-md text-on-surface-variant mb-8">Agrega productos al carrito para continuar con la compra.</p>
+            <Link className="inline-flex rounded bg-primary px-6 py-3 font-label-md text-label-md uppercase tracking-widest text-on-primary transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary-container active:translate-y-0 active:scale-[0.99]" href="/categorias">Ver categorías</Link>
           </section>
         )}
       </main>

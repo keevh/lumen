@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AdminCard, AdminField, AdminPageHeader, adminInputClass } from "@/components/admin/AdminPrimitives";
 import { adminSessionKey } from "@/components/admin/AdminLayout";
@@ -40,10 +41,13 @@ export function AdminLoginClient() {
       {error ? <p className="mb-4 rounded-lg bg-error-container px-4 py-3 text-on-error-container" role="alert">{error}</p> : null}
       <AdminCard>
         <form className="space-y-5" onSubmit={login}>
-          <AdminField label="Correo administrativo"><input className={adminInputClass} type="email" value={email} onChange={(event) => setEmail(event.target.value)} /></AdminField>
-          <AdminField label="Contraseña"><input className={adminInputClass} type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="lumen-demo" /></AdminField>
-          <button className="w-full rounded bg-primary px-5 py-3 text-on-primary" type="submit">Ingresar</button>
+          <AdminField label="Correo administrativo"><input className={adminInputClass} type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="admin@lumen.local" /></AdminField>
+          <AdminField label="Contraseña"><input className={adminInputClass} type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Ingresa tu contraseña" /></AdminField>
+          <button className="w-full rounded bg-primary px-5 py-3 text-on-primary transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary-container active:translate-y-0 active:scale-[0.99]" type="submit">Ingresar</button>
         </form>
+        <div className="mt-4 flex justify-center">
+          <Link className="rounded-full px-4 py-2 text-sm text-primary transition-colors duration-200 hover:bg-surface-variant" href="/">Volver al inicio</Link>
+        </div>
       </AdminCard>
     </div>
   );
