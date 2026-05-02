@@ -4,6 +4,7 @@ export type ProductImage = {
   url: string;
   alt: string;
   position: number;
+  color?: string;
 };
 
 export type Product = {
@@ -12,6 +13,7 @@ export type Product = {
   displayName: string;
   description: string;
   price: number;
+  compareAtPrice?: number;
   stock: number;
   category: string;
   colors: string[];

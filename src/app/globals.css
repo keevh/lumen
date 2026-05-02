@@ -164,3 +164,7 @@ body {
 .lumen-input:focus { border-color: #556257; box-shadow: 0 0 0 2px rgba(85,98,87,.2); outline: none; }
 .product-card:hover .product-image { transform: scale(1.03); }
 .product-image { transition: transform .6s cubic-bezier(.25,1,.5,1); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

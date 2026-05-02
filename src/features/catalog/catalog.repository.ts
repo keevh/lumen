@@ -1,5 +1,6 @@
 import { products } from "@/data/catalog";
 import { getCategoryBySlug, productMatchesCategory } from "@/features/catalog/categories";
+import { hasVisibleDiscount } from "@/features/catalog/pricing";
 import type { ProductFilters } from "@/features/catalog/product.types";
 
 function matchesProductFilters(product: (typeof products)[number], filters?: ProductFilters) {
@@ -15,6 +16,10 @@ export async function listFeaturedProducts() {
 
 export async function listProducts(filters?: ProductFilters) {
   return products.filter((product) => matchesProductFilters(product, filters));
+}
+
+export async function listOfferProducts() {
+  return products.filter((product) => product.status === "active" && hasVisibleDiscount(product));
 }
 
 export async function listLinenProducts() {

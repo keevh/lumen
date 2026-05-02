@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import { AdminCard, AdminPageHeader } from "@/components/admin/AdminPrimitives";
 import { calculateAdminMetrics, manageableOrderStatuses, normalizeOrderStatus, orderStatusLabels } from "@/features/admin/admin-metrics";
 import type { Product } from "@/features/catalog/product.types";
@@ -14,6 +15,7 @@ export function AdminSalesClient() {
   const [products, setProducts] = useState<Product[]>([]);
   const [message, setMessage] = useState("");
   const [selectedOrderId, setSelectedOrderId] = useState<string>("");
+  const shouldReduceMotion = useReducedMotion();
 
   const load = useCallback(async () => {
     if (!repositories) return;
@@ -68,13 +70,13 @@ export function AdminSalesClient() {
             {!activeOrders.length ? <p className="py-8 text-center text-on-surface-variant">No hay pedidos activos en este momento.</p> : null}
           </AdminCard>
 
-          <details className="rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-5 soft-shadow">
+          <motion.details className="rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-5 soft-shadow" initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}>
             <summary className="cursor-pointer list-none font-headline-sm text-headline-sm text-on-surface"><div className="flex items-center justify-between gap-3"><span>Historial</span><span className="rounded-full bg-surface-container px-3 py-1 text-xs text-on-surface-variant">{archivedOrders.length} pedidos</span></div></summary>
             <div className="mt-5 overflow-x-auto">
               <table className="w-full min-w-[780px] text-left text-sm"><thead className="text-on-surface-variant"><tr><th className="py-2">Pedido</th><th>Cliente</th><th>Total</th><th>Unidades</th><th>Estado</th><th>Fecha</th></tr></thead><tbody>{archivedOrders.map((order) => <tr key={order.id} className={`cursor-pointer border-t border-outline-variant/20 transition-colors duration-200 hover:bg-surface-container-low ${selectedOrderId === order.id ? "bg-primary-fixed/30" : ""}`} onClick={() => setSelectedOrderId(order.id)}><td className="py-3 font-medium">{order.id}</td><td><p>{order.customerName || "Sin nombre"}</p><p className="text-on-surface-variant">{order.customerEmail || "Sin correo electrónico"}</p></td><td>{formatMoney(order.total)}</td><td>{getOrderUnits(order)}</td><td><span className="inline-flex rounded-full bg-surface-container px-3 py-1 text-xs text-on-surface-variant">{orderStatusLabels[normalizeOrderStatus(order.status)]}</span></td><td>{new Date(order.createdAt).toLocaleDateString("es")}</td></tr>)}</tbody></table>
               {!archivedOrders.length ? <p className="py-8 text-center text-on-surface-variant">No hay pedidos archivados todavía.</p> : null}
             </div>
-          </details>
+          </motion.details>
         </div>
 
         <AdminCard>

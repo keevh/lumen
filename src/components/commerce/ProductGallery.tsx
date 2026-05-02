@@ -1,12 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ProductImage } from "@/features/catalog/product.types";
+import { getImagesForColor } from "@/features/catalog/product-images";
 
-export function ProductGallery({ images, productName }: { images: ProductImage[]; productName: string }) {
+export function ProductGallery({ images, productName, selectedColor }: { images: ProductImage[]; productName: string; selectedColor?: string }) {
   const [active, setActive] = useState(0);
-  const sortedImages = [...images].sort((left, right) => left.position - right.position);
+  const sortedImages = useMemo(() => getImagesForColor(images, selectedColor), [images, selectedColor]);
   const activeImage = sortedImages[active] ?? sortedImages[0];
+
+  useEffect(() => {
+    setActive(0);
+  }, [selectedColor, images]);
 
   return (
     <div className="md:col-span-7 flex flex-col md:flex-row gap-stack-md">

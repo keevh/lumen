@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { PublicPageTransition } from "@/components/ui/PublicPageTransition";
 import { Icon } from "@/components/ui/Icon";
 
 export function CheckoutSuccessClient() {
@@ -9,7 +10,7 @@ export function CheckoutSuccessClient() {
   const orderId = searchParams.get("order");
 
   return (
-    <div className="min-h-screen bg-background text-on-background flex flex-col">
+    <PublicPageTransition className="min-h-screen bg-background text-on-background flex flex-col">
       <header className="w-full bg-surface/80 backdrop-blur-md shadow-sm fixed top-0 left-0 z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 border-b border-outline-variant/10">
         <Link className="font-display-lg text-display-lg-mobile md:text-display-lg tracking-tighter text-primary" href="/">LUMEN</Link>
       </header>
@@ -24,6 +25,6 @@ export function CheckoutSuccessClient() {
           </Link>
         </section>
       </main>
-    </div>
+    </PublicPageTransition>
   );
 }

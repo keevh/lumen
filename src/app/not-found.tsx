@@ -6,7 +6,7 @@ export default function NotFound() {
   return (
     <div className="min-h-screen flex flex-col bg-background text-on-background selection:bg-primary-container selection:text-on-primary-container">
       <SiteHeader />
-      <main className="flex-grow pt-[120px] pb-section-gap px-margin-mobile md:px-margin-desktop flex items-center justify-center">
+      <main className="flex-grow pt-[100px] pb-section-gap px-margin-mobile md:px-margin-desktop flex items-center justify-center">
         <section className="max-w-2xl text-center bg-surface/80 backdrop-blur-sm rounded-2xl soft-shadow p-10 md:p-14 border border-outline-variant/10">
           <span className="font-label-caps text-label-caps text-secondary mb-4 block">Error 404</span>
           <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-6">No encontramos esta página</h1>

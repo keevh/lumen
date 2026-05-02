@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { AdminCard, AdminField, AdminPageHeader, adminInputClass } from "@/components/admin/AdminPrimitives";
+import { Toast, useTimedToast } from "@/components/ui/Toast";
 import type { StoreSettings } from "@/features/settings/settings.types";
 import { useBrowserRepositories } from "@/shared/storage/useBrowserRepositories";
 
@@ -15,11 +16,11 @@ export function AdminSettingsClient() {
   const [settings, setSettings] = useState<StoreSettings>(fallbackSettings);
   const [adminEmail, setAdminEmail] = useState(defaultEmail);
   const [adminPassword, setAdminPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const { message, tone, showToast } = useTimedToast();
 
   useEffect(() => {
     if (!repositories) return;
-    repositories.settings.getStoreSettings().then(setSettings).catch(() => setMessage("No pudimos cargar la configuración."));
+    repositories.settings.getStoreSettings().then(setSettings).catch(() => showToast("No pudimos cargar la configuración.", "error"));
   }, [repositories]);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export function AdminSettingsClient() {
     event.preventDefault();
     if (!repositories) return;
     await repositories.settings.saveStoreSettings({ ...settings, taxRate: Number(settings.taxRate), updatedAt: new Date().toISOString() });
-    setMessage("Configuración guardada.");
+    showToast("Configuración guardada.");
   }
 
   function saveAccount(event: FormEvent<HTMLFormElement>) {
@@ -38,13 +39,13 @@ export function AdminSettingsClient() {
     localStorage.setItem(adminEmailKey, adminEmail);
     if (adminPassword) localStorage.setItem(adminPasswordKey, adminPassword);
     setAdminPassword("");
-    setMessage("Datos de acceso guardados localmente.");
+    showToast("Datos de acceso guardados localmente.");
   }
 
   return (
     <>
+      <Toast message={message} tone={tone} />
       <AdminPageHeader title="Configuración" description="Ajustes generales de la tienda guardados localmente en el navegador." />
-      {message ? <p className="mb-4 rounded-lg bg-primary-container px-4 py-3 text-on-primary-container" role="status">{message}</p> : null}
       <div className="grid gap-6 xl:grid-cols-2">
       <AdminCard>
         <h2 className="mb-4 font-headline-sm text-headline-sm">Tienda</h2>

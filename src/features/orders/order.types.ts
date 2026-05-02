@@ -9,6 +9,7 @@ export type Order = {
   subtotal: number;
   tax: number;
   discountTotal: number;
+  discountCode?: string;
   total: number;
   customerEmail?: string;
   customerName?: string;
