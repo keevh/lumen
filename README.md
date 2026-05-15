@@ -82,10 +82,54 @@ http://localhost:3000
 ## Scripts disponibles
 
 ```bash
+pnpm build
 pnpm dev
 pnpm lint
+pnpm start
 pnpm typecheck
 ```
+
+## Despliegue
+
+La opción recomendada para este proyecto es **Vercel**.
+
+### Despliegue en Vercel
+
+1. Sube el repositorio a GitHub.
+2. Entra a [Vercel](https://vercel.com/).
+3. Importa el repositorio `keevh/lumen`.
+4. Deja que Vercel detecte **Next.js** automáticamente.
+5. Usa `pnpm` como package manager.
+6. Publica el proyecto.
+
+Configuración esperada:
+
+- Framework: `Next.js`
+- Install command: `pnpm install`
+- Build command: `pnpm build`
+- Output: automático de Next.js
+
+### Importante antes de publicar
+
+Este proyecto funciona hoy como **demo local desplegable**, no como e-commerce multiusuario real.
+
+- Productos, carrito, pedidos, descuentos y configuración se guardan en **IndexedDB**.
+- La información vive en el navegador de cada usuario.
+- Los cambios hechos en `/admin` no se comparten entre navegadores ni dispositivos.
+
+Eso significa que el deploy es ideal para:
+
+- portafolio
+- demo funcional
+- presentación del proyecto
+
+Y no es la arquitectura final para:
+
+- tienda real
+- panel administrativo compartido
+- persistencia global entre usuarios
+
+Si más adelante quieres llevarlo a producción real, el siguiente paso es mover la persistencia a una base remota como Postgres, Supabase o PostgREST.
 
 ## Persistencia y datos
 
