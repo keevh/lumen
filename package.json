@@ -4,22 +4,12 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.5.2",
-    "engines": {
-    "node": "22.x"
-  },
   "scripts": {
     "build": "next build",
     "dev": "next dev",
     "lint": "eslint .",
     "start": "next start",
     "typecheck": "tsc --noEmit"
-  },
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "^11.5.2",
-      "onFail": "download"
-    }
   },
   "dependencies": {
     "motion": "^12.40.0",
