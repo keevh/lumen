@@ -12,6 +12,7 @@ const footerLinks = [
   { label: "Privacidad", href: "/en-construccion/privacidad" },
   { label: "Envíos", href: "/en-construccion/envios" },
   { label: "Mayoristas", href: "/en-construccion/mayoristas" },
+  { label: "Administración", href: "/admin" },
 ];
 
 export function SiteFooter({ variant = "soft" }: { variant?: "soft" | "editorial" | "checkout" }) {

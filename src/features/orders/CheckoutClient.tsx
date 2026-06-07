@@ -248,19 +248,19 @@ export function CheckoutClient() {
             <div className="lg:col-span-7 space-y-8">
               <section className="lumen-card p-6 md:p-8">
                 <h2 className="font-headline-sm text-headline-sm text-on-background mb-6">Datos de contacto</h2>
-                <TextField error={errors.email} label="Correo electrónico" type="email" value={draft.email} onChange={(value) => updateField("email", value)} />
+                <TextField error={errors.email} label="Correo electrónico" type="email" value={draft.email} onChange={(value) => updateField("email", value)} placeholder="nombre@correo.com" />
               </section>
 
               <section className="lumen-card p-6 md:p-8">
                 <h2 className="font-headline-sm text-headline-sm text-on-background mb-6">Dirección de envío</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <TextField error={errors.firstName} label="Nombre" value={draft.firstName} onChange={(value) => updateField("firstName", value)} />
-                  <TextField error={errors.lastName} label="Apellido" value={draft.lastName} onChange={(value) => updateField("lastName", value)} />
-                  <TextField className="md:col-span-2" error={errors.address} label="Dirección" value={draft.address} onChange={(value) => updateField("address", value)} />
-                  <TextField className="md:col-span-2" label="Departamento, piso, etc. (opcional)" value={draft.apartment} onChange={(value) => updateField("apartment", value)} />
-                  <TextField error={errors.city} label="Ciudad" value={draft.city} onChange={(value) => updateField("city", value)} />
-                  <TextField error={errors.zip} label="Código postal" value={draft.zip} onChange={(value) => updateField("zip", value)} />
-                  <TextField className="md:col-span-2" error={errors.phone} label="Teléfono" type="tel" value={draft.phone} onChange={(value) => updateField("phone", value)} />
+                  <TextField error={errors.firstName} label="Nombre" value={draft.firstName} onChange={(value) => updateField("firstName", value)} placeholder="María" />
+                  <TextField error={errors.lastName} label="Apellido" value={draft.lastName} onChange={(value) => updateField("lastName", value)} placeholder="González" />
+                  <TextField className="md:col-span-2" error={errors.address} label="Dirección" value={draft.address} onChange={(value) => updateField("address", value)} placeholder="Av. Corrientes 1234" />
+                  <TextField className="md:col-span-2" label="Departamento, piso, etc. (opcional)" value={draft.apartment} onChange={(value) => updateField("apartment", value)} placeholder="Piso 4, depto. B" />
+                  <TextField error={errors.city} label="Ciudad" value={draft.city} onChange={(value) => updateField("city", value)} placeholder="Córdoba" />
+                  <TextField error={errors.zip} label="Código postal" value={draft.zip} onChange={(value) => updateField("zip", value)} placeholder="5000" />
+                  <TextField className="md:col-span-2" error={errors.phone} label="Teléfono" type="tel" value={draft.phone} onChange={(value) => updateField("phone", value)} placeholder="+54 9 11 5555 5555" />
                 </div>
               </section>
 
@@ -327,11 +327,11 @@ export function CheckoutClient() {
   );
 }
 
-function TextField({ className = "", error, label, type = "text", value, onChange }: { className?: string; error?: string; label: string; type?: string; value: string; onChange: (value: string) => void }) {
+function TextField({ className = "", error, label, type = "text", value, onChange, placeholder = "" }: { className?: string; error?: string; label: string; type?: string; value: string; onChange: (value: string) => void; placeholder?: string }) {
   return (
     <label className={`block ${className}`}>
       <span className="mb-2 block text-on-surface-variant">{label}</span>
-      <input className={`w-full rounded-xl bg-white px-4 py-3 text-on-surface shadow-sm transition-all duration-200 placeholder:text-on-surface-variant/70 focus:outline-none focus:ring-2 ${error ? "border border-error focus:border-error focus:ring-error/20" : "border border-[#8e958b] focus:border-primary focus:ring-primary/20"}`} type={type} value={value} onChange={(event) => onChange(event.target.value)} aria-invalid={Boolean(error)} />
+      <input className={`w-full rounded-xl bg-white px-4 py-3 text-on-surface shadow-sm transition-all duration-200 placeholder:text-on-surface-variant/70 focus:outline-none focus:ring-2 ${error ? "border border-error focus:border-error focus:ring-error/20" : "border border-[#8e958b] focus:border-primary focus:ring-primary/20"}`} type={type} value={value} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} aria-invalid={Boolean(error)} />
       {error ? <span className="mt-2 block text-error text-body-md">{error}</span> : null}
     </label>
   );

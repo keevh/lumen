@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { FormEvent, KeyboardEvent, useCallback, useEffect, useId, useMemo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { AdminCard, AdminField, AdminModal, AdminPageHeader, adminInputClass } from "@/components/admin/AdminPrimitives";
 import { Toast, useTimedToast } from "@/components/ui/Toast";
@@ -421,10 +421,10 @@ function ProductFields({
       </div>
 
       <SuggestionInput label="Material" value={draft.material} onChange={(value) => update("material", value)} placeholder="Lino europeo" suggestions={suggestionSource.materials} />
-      <SuggestionInput label="Colores" value={draft.colors} onChange={(value) => update("colors", value)} placeholder="Arena, Blanco roto" suggestions={suggestionSource.colors} multiValue helperText="Escribe colores separados por coma. Las sugerencias reutilizan valores guardados." />
+      <SuggestionInput label="Colores" value={draft.colors} onChange={(value) => update("colors", value)} placeholder="Arena, Blanco roto" suggestions={suggestionSource.colors} multiValue helperText="Escribe colores separados por coma. Usa exactamente los mismos nombres que vas a poner a la izquierda en <Color | URL> dentro de Imágenes." />
       <SuggestionInput label="Tallas" value={draft.sizes} onChange={(value) => update("sizes", value)} placeholder="S, M, L" suggestions={suggestionSource.sizes} multiValue helperText="Usa comas para agregar varias tallas y reduce errores con las sugerencias." />
-      <AdminField label="Imágenes por color o generales"><textarea className={adminInputClass} rows={5} value={draft.images} onChange={(e) => update("images", e.target.value)} placeholder={"Azul | https://.../camisa-azul.jpg\nBeige | https://.../camisa-beige.jpg\nhttps://.../detalle-general.jpg"} required /></AdminField>
-      <p className="-mt-2 text-body-sm text-on-surface-variant">Usa el formato <strong className="text-on-surface">Color | URL</strong> para que la vista previa cambie al seleccionar un color. Si dejas solo la URL, la imagen será general.</p>
+      <AdminField label="Imágenes por color o generales"><textarea className={adminInputClass} rows={5} value={draft.images} onChange={(e) => update("images", e.target.value)} placeholder={"Arena | https://images.unsplash.com/photo-1512436991641-6745cdb1723f\nBlanco roto | https://images.unsplash.com/photo-1521572163474-6864f9cf17ab\nhttps://images.unsplash.com/photo-1483985988355-763728e1935b"} required /></AdminField>
+      <p className="-mt-2 text-body-sm text-on-surface-variant">Usa el formato <strong className="text-on-surface">Color | URL</strong> para que la vista previa cambie al seleccionar un color. Los nombres de <strong className="text-on-surface">Colores</strong> deben coincidir con el texto de la izquierda. Si dejas solo la URL, la imagen será general.</p>
       <AdminField label="Estado"><select className={adminInputClass} value={draft.status} onChange={(e) => update("status", e.target.value as ProductStatus)}><option value="active">Activo</option><option value="draft">Borrador</option></select></AdminField>
     </>
   );
@@ -468,51 +468,134 @@ function SuggestionInput({
   helperText?: string;
   multiValue?: boolean;
 }) {
+  const inputId = useId();
+  const listboxId = `${inputId}-suggestions`;
+  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
   const [visibleSuggestions, setVisibleSuggestions] = useState<string[]>([]);
+  const [isFocused, setIsFocused] = useState(false);
+  const [hasInteractionIntent, setHasInteractionIntent] = useState(false);
 
   useEffect(() => {
+    if (!isFocused || !hasInteractionIntent) {
+      setVisibleSuggestions([]);
+      setActiveSuggestionIndex(-1);
+      return;
+    }
+
     const timer = window.setTimeout(() => {
       const token = multiValue ? getLastToken(value) : value.trim();
 
       if (!token) {
         setVisibleSuggestions([]);
+        setActiveSuggestionIndex(-1);
         return;
       }
 
-      const usedValues = multiValue ? new Set(splitValues(value).map((item) => item.toLowerCase())) : new Set<string>();
-      setVisibleSuggestions(
-        suggestions
+      const usedValues = new Set((multiValue ? getCommittedValues(value) : []).map((item) => item.toLowerCase()));
+      const nextSuggestions = suggestions
           .filter((suggestion) => suggestion.toLowerCase().includes(token.toLowerCase()))
-          .filter((suggestion) => !usedValues.has(suggestion.toLowerCase()) || suggestion.toLowerCase() === token.toLowerCase())
-          .slice(0, 6),
-      );
+          .filter((suggestion) => !usedValues.has(suggestion.toLowerCase()))
+          .slice(0, 6);
+
+      setVisibleSuggestions(nextSuggestions);
+      setActiveSuggestionIndex((current) => (nextSuggestions.length === 0 ? -1 : Math.min(current, nextSuggestions.length - 1)));
     }, 220);
 
     return () => window.clearTimeout(timer);
-  }, [multiValue, suggestions, value]);
+  }, [hasInteractionIntent, isFocused, multiValue, suggestions, value]);
 
   function selectSuggestion(suggestion: string) {
     if (!multiValue) {
       onChange(suggestion);
       setVisibleSuggestions([]);
+      setActiveSuggestionIndex(-1);
+      setHasInteractionIntent(false);
       return;
     }
 
-    const currentValues = splitValues(value);
-    currentValues.splice(Math.max(currentValues.length - 1, 0), currentValues.length > 0 ? 1 : 0, suggestion);
-    onChange(`${currentValues.join(", ")}${value.endsWith(",") ? "," : ""}`);
+    const nextValues = value.trim().endsWith(",") ? [...splitValues(value), suggestion] : [...getCommittedValues(value), suggestion];
+    onChange(`${nextValues.join(", ")}, `);
     setVisibleSuggestions([]);
+    setActiveSuggestionIndex(-1);
+    setHasInteractionIntent(false);
+  }
+
+  function handleFocus() {
+    setIsFocused(true);
+    setHasInteractionIntent(true);
+  }
+
+  function handleBlur(event: React.FocusEvent<HTMLDivElement>) {
+    if (event.relatedTarget instanceof Node && event.currentTarget.contains(event.relatedTarget)) return;
+
+    setIsFocused(false);
+    setVisibleSuggestions([]);
+    setActiveSuggestionIndex(-1);
+  }
+
+  function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Escape") {
+      setVisibleSuggestions([]);
+      setActiveSuggestionIndex(-1);
+      setHasInteractionIntent(false);
+      event.currentTarget.blur();
+      return;
+    }
+
+    if (event.key === "ArrowDown") {
+      if (visibleSuggestions.length === 0) return;
+      event.preventDefault();
+      setActiveSuggestionIndex((current) => (current + 1) % visibleSuggestions.length);
+      return;
+    }
+
+    if (event.key === "ArrowUp") {
+      if (visibleSuggestions.length === 0) return;
+      event.preventDefault();
+      setActiveSuggestionIndex((current) => (current <= 0 ? visibleSuggestions.length - 1 : current - 1));
+      return;
+    }
+
+    if (event.key === "Enter" && activeSuggestionIndex >= 0) {
+      event.preventDefault();
+      selectSuggestion(visibleSuggestions[activeSuggestionIndex]);
+      return;
+    }
+
+    setHasInteractionIntent(true);
   }
 
   return (
-    <AdminField label={label}>
-      <div className="relative">
-        <input className={adminInputClass} value={value} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} />
-        {visibleSuggestions.length > 0 ? <div className="absolute z-10 mt-2 w-full rounded-2xl border border-outline-variant/20 bg-surface-container-lowest p-2 shadow-lg"><div className="flex flex-wrap gap-2">{visibleSuggestions.map((suggestion) => <button key={suggestion} className="rounded-full border border-outline-variant/30 px-3 py-1 text-body-sm text-on-surface transition-colors duration-200 hover:border-primary hover:text-primary" type="button" onClick={() => selectSuggestion(suggestion)}>{suggestion}</button>)}</div></div> : null}
+    <div className="block">
+      <label className="mb-2 block text-sm text-on-surface-variant" htmlFor={inputId}>{label}</label>
+      <div className="relative" onBlur={handleBlur}>
+        <input
+          aria-activedescendant={activeSuggestionIndex >= 0 ? `${inputId}-option-${activeSuggestionIndex}` : undefined}
+          aria-autocomplete="list"
+          aria-controls={visibleSuggestions.length > 0 ? listboxId : undefined}
+          aria-expanded={visibleSuggestions.length > 0}
+          className={adminInputClass}
+          id={inputId}
+          role="combobox"
+          value={value}
+          onChange={(event) => {
+            setHasInteractionIntent(true);
+            onChange(event.target.value);
+          }}
+          onFocus={handleFocus}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
+        />
+        {visibleSuggestions.length > 0 ? <div className="absolute inset-x-0 top-full z-20 mt-2 rounded-2xl border border-outline-variant/40 bg-surface p-2 shadow-[0_18px_40px_rgba(17,24,39,0.16)]"><p className="px-2 pb-2 text-label-sm uppercase tracking-widest text-on-surface-variant">Sugerencias</p><ul id={listboxId} role="listbox" aria-label={`Sugerencias para ${label.toLowerCase()}`} className="flex flex-col gap-1">{visibleSuggestions.map((suggestion, index) => <li key={suggestion} id={`${inputId}-option-${index}`} role="option" aria-selected={index === activeSuggestionIndex} className={`cursor-pointer rounded-xl border px-3 py-2 text-body-sm transition-all duration-200 ${index === activeSuggestionIndex ? "border-primary/40 bg-primary-fixed/30 text-primary" : "border-transparent bg-surface-container-low text-on-surface hover:border-primary/30 hover:bg-primary-fixed/30 hover:text-primary"}`} onMouseDown={(event) => event.preventDefault()} onMouseEnter={() => setActiveSuggestionIndex(index)} onClick={() => selectSuggestion(suggestion)}>{suggestion}</li>)}</ul></div> : null}
       </div>
       {helperText ? <p className="mt-2 text-body-sm text-on-surface-variant">{helperText}</p> : null}
-    </AdminField>
+    </div>
   );
+}
+
+function getCommittedValues(value: string) {
+  const tokens = value.split(",").map((item) => item.trim()).filter(Boolean);
+  return value.trim().endsWith(",") ? tokens : tokens.slice(0, -1);
 }
 
 function getLastToken(value: string) {

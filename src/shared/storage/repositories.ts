@@ -3,6 +3,7 @@ import type { CatalogRepository, Product, ProductFilters } from "@/features/cata
 import type { Discount, DiscountsRepository } from "@/features/discounts/discount.types";
 import type { Order, OrdersRepository } from "@/features/orders/order.types";
 import type { SettingsRepository, StoreSettings } from "@/features/settings/settings.types";
+import { getBrowserLocale } from "@/shared/browser-locale";
 import type { CommerceRepositories } from "@/shared/storage/storage-port";
 import {
   clearStore,
@@ -14,6 +15,7 @@ import {
   putInStore,
   STORE_NAMES,
 } from "@/shared/storage/browser-db";
+import { dispatchCartUpdatedEvent } from "@/shared/storage/cart-events";
 
 function sortByUpdatedAtDesc<T extends { updatedAt: string }>(items: T[]) {
   return [...items].sort((left, right) => right.updatedAt.localeCompare(left.updatedAt));
@@ -46,6 +48,14 @@ function createCartItem(input: CartItemInput): CartItem {
     id: `${input.productId}:${input.color ?? "default"}:${input.size ?? "default"}`,
     price: input.unitPrice,
   };
+}
+
+function resolveDefaultStoreSettings(): StoreSettings {
+  return { ...defaultStoreSettings, locale: getBrowserLocale(defaultStoreSettings.locale) };
+}
+
+function shouldUseBrowserLocale(settings: StoreSettings) {
+  return settings.locale === defaultStoreSettings.locale && settings.updatedAt === defaultStoreSettings.updatedAt;
 }
 
 const catalogRepository: CatalogRepository = {
@@ -86,7 +96,9 @@ const cartRepository: CartRepository = {
     const item = existing ? { ...existing, quantity: existing.quantity + nextItem.quantity } : nextItem;
 
     await putInStore(STORE_NAMES.cart, item);
-    return cartRepository.getCart();
+    const cart = await cartRepository.getCart();
+    dispatchCartUpdatedEvent(cart);
+    return cart;
   },
 
   async updateQuantity(itemId, quantity) {
@@ -95,21 +107,29 @@ const cartRepository: CartRepository = {
 
     if (quantity <= 0) {
       await deleteFromStore(STORE_NAMES.cart, itemId);
-      return cartRepository.getCart();
+      const cart = await cartRepository.getCart();
+      dispatchCartUpdatedEvent(cart);
+      return cart;
     }
 
     await putInStore(STORE_NAMES.cart, { ...existing, quantity });
-    return cartRepository.getCart();
+    const cart = await cartRepository.getCart();
+    dispatchCartUpdatedEvent(cart);
+    return cart;
   },
 
   async removeItem(itemId) {
     await deleteFromStore(STORE_NAMES.cart, itemId);
-    return cartRepository.getCart();
+    const cart = await cartRepository.getCart();
+    dispatchCartUpdatedEvent(cart);
+    return cart;
   },
 
   async clearCart() {
     await clearStore(STORE_NAMES.cart);
-    return cartRepository.getCart();
+    const cart = await cartRepository.getCart();
+    dispatchCartUpdatedEvent(cart);
+    return cart;
   },
 };
 
@@ -147,7 +167,17 @@ const discountsRepository: DiscountsRepository = {
 
 const settingsRepository: SettingsRepository = {
   async getStoreSettings() {
-    return (await getFromStore<StoreSettings>(STORE_NAMES.settings, defaultStoreSettings.id)) ?? defaultStoreSettings;
+    const storedSettings = await getFromStore<StoreSettings>(STORE_NAMES.settings, defaultStoreSettings.id);
+
+    if (!storedSettings) {
+      return resolveDefaultStoreSettings();
+    }
+
+    if (shouldUseBrowserLocale(storedSettings)) {
+      return { ...storedSettings, locale: getBrowserLocale(defaultStoreSettings.locale) };
+    }
+
+    return storedSettings;
   },
 
   async saveStoreSettings(settings) {

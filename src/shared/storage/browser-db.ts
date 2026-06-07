@@ -4,6 +4,7 @@ import type { Product } from "@/features/catalog/product.types";
 import type { Discount } from "@/features/discounts/discount.types";
 import type { Order } from "@/features/orders/order.types";
 import type { StoreSettings } from "@/features/settings/settings.types";
+import { FALLBACK_BROWSER_LOCALE } from "@/shared/browser-locale";
 
 const DB_NAME = "lumens-commerce";
 const DB_VERSION = 1;
@@ -24,7 +25,7 @@ export const defaultStoreSettings: StoreSettings = {
   storeName: "LUMEN",
   currency: "USD",
   taxRate: 0.1,
-  locale: "es-AR",
+  locale: FALLBACK_BROWSER_LOCALE,
   updatedAt: "2026-06-12T00:00:00.000Z",
 };
 

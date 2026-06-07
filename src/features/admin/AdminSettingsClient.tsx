@@ -4,16 +4,17 @@ import { FormEvent, useEffect, useState } from "react";
 import { AdminCard, AdminField, AdminPageHeader, adminInputClass } from "@/components/admin/AdminPrimitives";
 import { Toast, useTimedToast } from "@/components/ui/Toast";
 import type { StoreSettings } from "@/features/settings/settings.types";
+import { FALLBACK_BROWSER_LOCALE, getBrowserLocale } from "@/shared/browser-locale";
 import { useBrowserRepositories } from "@/shared/storage/useBrowserRepositories";
 
-const fallbackSettings: StoreSettings = { id: "store", storeName: "LUMEN", currency: "USD", taxRate: 0.1, locale: "es-AR", updatedAt: "" };
+const fallbackSettings: StoreSettings = { id: "store", storeName: "LUMEN", currency: "USD", taxRate: 0.1, locale: FALLBACK_BROWSER_LOCALE, updatedAt: "" };
 const adminEmailKey = "lumens-admin-email";
 const adminPasswordKey = "lumens-admin-password";
 const defaultEmail = "admin@lumen.local";
 
 export function AdminSettingsClient() {
   const repositories = useBrowserRepositories();
-  const [settings, setSettings] = useState<StoreSettings>(fallbackSettings);
+  const [settings, setSettings] = useState<StoreSettings>(() => ({ ...fallbackSettings, locale: getBrowserLocale(fallbackSettings.locale) }));
   const [adminEmail, setAdminEmail] = useState(defaultEmail);
   const [adminPassword, setAdminPassword] = useState("");
   const { message, tone, showToast } = useTimedToast();
