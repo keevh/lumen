@@ -118,7 +118,7 @@ La documentacion tecnica del proyecto incluye tres diagramas que resumen el mode
 
 ### Modelo de datos y persistencia local
 
-![Modelo de datos y persistencia local](docs/diagrams/rendered/database-model.png)
+![Modelo de datos y persistencia local](docs/diagrams/rendered/Lumen_modelo_datos_persistencia.png)
 
 Este diagrama separa las entidades principales del dominio de los mecanismos de persistencia del navegador. En el centro aparecen `Product`, `CartItem`, `Cart`, `Order`, `Discount` y `StoreSettings`; a un lado se muestra el contexto de almacenamiento local con `IndexedDB`, `sessionStorage` y `localStorage`.
 

@@ -1,0 +1,79 @@
+<mxfile host="app.diagrams.net" modified="2026-06-15T21:00:00.000Z" agent="OpenCode" version="26.0.11">
+  <diagram id="database-model" name="Page-1">
+    <mxGraphModel dx="1386" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1280" pageHeight="960" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Lumen - Modelo de datos y persistencia local" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=24;fontStyle=1;spacingLeft=4;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="640" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="domain" value="Modelo de datos local" style="swimlane;startSize=28;rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#b3b3b3;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="720" height="560" as="geometry" />
+        </mxCell>
+        <mxCell id="product" value="&lt;b&gt;Product&lt;/b&gt;&#xa;id&#xa;slug&#xa;displayName&#xa;price&#xa;compareAtPrice&#xa;stock&#xa;category&#xa;status" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#1f1f1f;" vertex="1" parent="domain">
+          <mxGeometry x="30" y="50" width="150" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="productImage" value="&lt;b&gt;ProductImage&lt;/b&gt;&#xa;url&#xa;alt&#xa;position&#xa;color" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=#1f1f1f;" vertex="1" parent="domain">
+          <mxGeometry x="220" y="50" width="150" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="cartItem" value="&lt;b&gt;CartItem&lt;/b&gt;&#xa;productId&#xa;variant&#xa;unitPrice&#xa;quantity&#xa;color&#xa;size" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#1f1f1f;" vertex="1" parent="domain">
+          <mxGeometry x="220" y="240" width="150" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="cart" value="&lt;b&gt;Cart&lt;/b&gt;&#xa;items&#xa;subtotal&#xa;tax&#xa;total" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#1f1f1f;" vertex="1" parent="domain">
+          <mxGeometry x="410" y="240" width="140" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="order" value="&lt;b&gt;Order&lt;/b&gt;&#xa;status&#xa;discountCode&#xa;total&#xa;customerName&#xa;paymentMethod" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontColor=#1f1f1f;" vertex="1" parent="domain">
+          <mxGeometry x="410" y="50" width="160" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="shipping" value="&lt;b&gt;ShippingAddress&lt;/b&gt;&#xa;address&#xa;city&#xa;zip&#xa;phone" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontColor=#1f1f1f;" vertex="1" parent="domain">
+          <mxGeometry x="600" y="50" width="150" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="discount" value="&lt;b&gt;Discount&lt;/b&gt;&#xa;code&#xa;type&#xa;value&#xa;status" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontColor=#1f1f1f;" vertex="1" parent="domain">
+          <mxGeometry x="600" y="220" width="130" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="settings" value="&lt;b&gt;StoreSettings&lt;/b&gt;&#xa;storeName&#xa;currency&#xa;taxRate&#xa;locale" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#1f1f1f;" vertex="1" parent="domain">
+          <mxGeometry x="70" y="420" width="160" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="persist" value="Persistencia local del navegador" style="swimlane;startSize=28;rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f4f8;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="120" width="360" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="indexeddb" value="&lt;b&gt;IndexedDB&lt;/b&gt;&#xa;catalogo&#xa;carrito/items&#xa;pedidos&#xa;descuentos&#xa;configuracion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#1f1f1f;" vertex="1" parent="persist">
+          <mxGeometry x="30" y="50" width="140" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="session" value="&lt;b&gt;sessionStorage&lt;/b&gt;&#xa;sesion admin&#xa;borrador checkout" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#1f1f1f;" vertex="1" parent="persist">
+          <mxGeometry x="200" y="50" width="130" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="local" value="&lt;b&gt;localStorage&lt;/b&gt;&#xa;credenciales admin" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontColor=#1f1f1f;" vertex="1" parent="persist">
+          <mxGeometry x="200" y="190" width="130" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="note1" value="No representa una base SQL tradicional." style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#1f1f1f;" vertex="1" parent="1">
+          <mxGeometry x="800" y="520" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="note2" value="IndexedDB funciona como almacenamiento NoSQL local por object stores." style="shape=note;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#1f1f1f;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="520" width="240" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="note3" value="Cart es un resumen calculado a partir de CartItem; no existe como store independiente." style="shape=note;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontColor=#1f1f1f;" vertex="1" parent="1">
+          <mxGeometry x="280" y="660" width="300" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;strokeColor=#6c8ebf;" edge="1" parent="1" source="product" target="productImage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;strokeColor=#82b366;" edge="1" parent="1" source="product" target="cartItem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;strokeColor=#d6b656;" edge="1" parent="1" source="cart" target="cartItem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;strokeColor=#b85450;" edge="1" parent="1" source="order" target="cartItem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;strokeColor=#b85450;" edge="1" parent="1" source="order" target="shipping">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;dashed=1;strokeColor=#b85450;" edge="1" parent="1" source="order" target="discount">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

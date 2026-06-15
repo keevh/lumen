@@ -1,0 +1,55 @@
+<mxfile host="app.diagrams.net" modified="2026-06-15T21:22:00.000Z" agent="OpenCode" version="26.0.11">
+  <diagram id="project-structure" name="Page-1">
+    <mxGraphModel dx="1386" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1280" pageHeight="960" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Lumen - Estructura del proyecto" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=24;fontStyle=1;spacingLeft=4;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="480" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="app" value="&lt;b&gt;src/app&lt;/b&gt;&#xa;rutas publicas&#xa;rutas admin&#xa;aliases y redirects" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="100" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="components" value="&lt;b&gt;src/components&lt;/b&gt;&#xa;commerce&#xa;admin&#xa;layout&#xa;motion&#xa;ui" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="90" width="180" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="features" value="&lt;b&gt;src/features&lt;/b&gt;&#xa;catalog&#xa;cart&#xa;orders&#xa;discounts&#xa;settings&#xa;admin" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="80" width="200" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="storage" value="&lt;b&gt;src/shared/storage&lt;/b&gt;&#xa;storage port&#xa;browser repositories&#xa;IndexedDB adapter&#xa;shared hooks&#xa;cart events" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="900" y="90" width="220" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="data" value="&lt;b&gt;src/data&lt;/b&gt;&#xa;seed data&#xa;datos base" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="320" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="lib" value="&lt;b&gt;src/lib&lt;/b&gt;&#xa;helpers&#xa;utilidades compartidas" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="320" width="170" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="note1" value="Las paginas se mantienen delgadas y delegan en componentes y modulos de dominio." style="shape=note;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="80" y="270" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="note2" value="La organizacion principal es por dominio de negocio, no por tipo tecnico global." style="shape=note;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="840" y="300" width="240" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="note3" value="La persistencia local se centraliza en `shared/storage`. `data` aporta seed inicial para catalogo y primera carga." style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="900" y="430" width="250" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" value="pantallas y UI" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;strokeColor=#6c8ebf;" edge="1" parent="1" source="app" target="components">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="flujos de negocio" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;strokeColor=#82b366;" edge="1" parent="1" source="app" target="features">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="consume dominio" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;strokeColor=#9673a6;" edge="1" parent="1" source="components" target="features">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="persistencia local" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;strokeColor=#d6b656;" edge="1" parent="1" source="features" target="storage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="seed inicial" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;strokeColor=#d79b00;" edge="1" parent="1" source="features" target="data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
