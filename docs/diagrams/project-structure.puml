@@ -1,77 +1,55 @@
 @startuml
 title Lumen - Estructura del proyecto
 
+top to bottom direction
 skinparam shadowing false
 skinparam linetype ortho
 
-package "src/app" as App {
-  [Rutas publicas]
-  [Rutas admin]
-  [Redirect aliases]
-}
+rectangle "src/app\n---\nrutas publicas\nrutas admin\naliases y redirects" as App
 
-package "src/components" as Components {
-  [commerce]
-  [admin]
-  [layout]
-  [motion]
-  [ui]
-}
+rectangle "src/components\n---\ncommerce\nadmin\nlayout\nmotion\nui" as Components
 
-package "src/features" as Features {
-  [catalog]
-  [cart]
-  [orders]
-  [discounts]
-  [settings]
-  [admin]
-}
+rectangle "src/features\n---\ncatalog\ncart\norders\ndiscounts\nsettings\nadmin" as Features
 
-package "src/shared/storage" as Storage {
-  [storage-port.ts]
-  [repositories.ts]
-  [browser-db.ts]
-  [useBrowserRepositories.ts]
-  [cart-events.ts]
-}
+rectangle "src/shared/storage\n---\nstorage port\nbrowser repositories\nIndexedDB adapter\nshared hooks\ncart events" as Storage
 
-package "src/data" as Data {
-  [catalog.ts]
-  [cart.ts]
-  [admin.ts]
-}
+rectangle "src/data\n---\nseed data\ndatos base" as Data
 
-package "src/lib" as Lib {
-  [format.ts]
-}
+rectangle "src/lib\n---\nhelpers\nutilidades compartidas" as Lib
 
-App --> Components : compone UI y layout
-App --> Features : delega flujos de negocio
-
-Components --> Features : consume tipos y logica
-Components --> Storage : clientes del navegador
-Components --> Lib : formato y helpers
-
-Features --> Data : seed y datos iniciales
-Features --> Lib : utilidades compartidas
+App --> Components : pantallas y UI
+App --> Features : flujos de negocio
+Components --> Features : consume dominio
 Features --> Storage : persistencia local
+Features --> Data : seed inicial
 
-Storage --> Data : seeding inicial
+Lib -[hidden]-> Data
+Storage -[hidden]-> Lib
 
 note right of App
-Entry points delgados con App Router.
-Las paginas delegan el comportamiento
-en componentes y modulos de dominio.
+Las paginas se mantienen delgadas
+y delegan en componentes y modulos
+de dominio.
 end note
 
-note bottom of Features
+note right of Features
 La organizacion principal es por dominio
 de negocio, no por tipo tecnico global.
 end note
 
-note bottom of Storage
-Concentra contratos, creacion centralizada
-de repositorios y adaptadores sobre IndexedDB.
+note right of Storage
+La persistencia local se centraliza en
+`shared/storage`.
+end note
+
+note right of Data
+`data` aporta seed inicial para
+catalogo y primera carga.
+end note
+
+note right of Components
+Los componentes reutilizables cubren
+storefront, admin, layout, motion y UI comun.
 end note
 
 @enduml

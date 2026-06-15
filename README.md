@@ -114,11 +114,28 @@ Las entidades principales confirmadas en el codigo son estas:
 
 ## Diagramas
 
-La documentacion tecnica del proyecto incluye tres diagramas PlantUML dentro de `docs/diagrams/`.
+La documentacion tecnica del proyecto incluye tres diagramas que resumen el modelo de datos local, la arquitectura general y la estructura del codigo. A continuacion se muestran las versiones renderizadas junto con una explicacion breve de cada una.
 
-- `docs/diagrams/database-model.puml`: representa el modelo de datos persistido localmente en navegador, incluyendo entidades y relaciones principales.
-- `docs/diagrams/system-architecture.puml`: muestra el flujo entre usuario, administrador, aplicacion Next.js, modulos de dominio, repositorios locales y storages del navegador.
-- `docs/diagrams/project-structure.puml`: resume como se relacionan las carpetas principales del proyecto en lugar de limitarse a repetir el arbol.
+### Modelo de datos y persistencia local
+
+![Modelo de datos y persistencia local](docs/diagrams/rendered/database-model.png)
+
+Este diagrama separa las entidades principales del dominio de los mecanismos de persistencia del navegador. En el centro aparecen `Product`, `CartItem`, `Cart`, `Order`, `Discount` y `StoreSettings`; a un lado se muestra el contexto de almacenamiento local con `IndexedDB`, `sessionStorage` y `localStorage`.
+
+- `IndexedDB` funciona aqui como almacenamiento NoSQL del navegador.
+- Sus `object stores` son contenedores locales de registros por clave, mas cercanos a colecciones de objetos que a tablas con joins.
+
+### Arquitectura general
+
+![Arquitectura general](docs/diagrams/rendered/system-architecture.png)
+
+El flujo principal va de actores a aplicacion, de aplicacion a modulos de dominio, y de ahi a la capa de persistencia local. La idea importante es que las pantallas no acceden directamente a IndexedDB: pasan por `src/features` y por la capa de repositorios y adaptadores de `src/shared/storage`, mientras `src/data/catalog.ts` actua como seed inicial para el catalogo.
+
+### Estructura del proyecto
+
+![Estructura del proyecto](docs/diagrams/rendered/project-structure.png)
+
+Este diagrama muestra la organizacion de la aplicacion por responsabilidades. `src/app` define rutas y entrypoints, `src/components` concentra la UI reutilizable, `src/features` actua como nucleo del dominio, `src/shared/storage` centraliza la persistencia local, `src/data` aporta el seed inicial y `src/lib` agrupa utilidades compartidas.
 
 ## Estado del proyecto
 

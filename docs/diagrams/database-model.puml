@@ -1,46 +1,39 @@
 @startuml
-title Lumen - Modelo de datos persistido localmente
+title Lumen - Modelo de datos y persistencia local
 
+left to right direction
 skinparam shadowing false
 skinparam linetype ortho
 
-rectangle "Product\n---\nid\nslug\ndisplayName\ndescription\nprice\ncompareAtPrice\nstock\ncategory\nstatus\ncreatedAt\nupdatedAt\nname\nmaterial\ncolor\nimage\nbadge" as Product
+package "Modelo de datos" as Domain {
+  rectangle "Product\n---\nid\nslug\ndisplayName\nprice\ncompareAtPrice\nstock\ncategory\nstatus" as Product
+  rectangle "ProductImage\n---\nurl\nalt\nposition\ncolor" as ProductImage
+  rectangle "CartItem\n---\nproductId\nvariant\nunitPrice\nquantity\ncolor\nsize" as CartItem
+  rectangle "Cart\n---\nitems\nsubtotal\ntax\ntotal" as Cart
+  rectangle "Order\n---\nstatus\ndiscountCode\ntotal\ncustomerName\npaymentMethod" as Order
+  rectangle "ShippingAddress\n---\naddress\ncity\nzip\nphone" as ShippingAddress
+  rectangle "Discount\n---\ncode\ntype\nvalue\nstatus" as Discount
+  rectangle "StoreSettings\n---\nstoreName\ncurrency\ntaxRate\nlocale" as StoreSettings
+}
 
-rectangle "ProductImage\n---\nurl\nalt\nposition\ncolor" as ProductImage
-
-rectangle "CartItem\n---\nid\nproductId\nslug\nname\nvariant\nunitPrice\nprice\nquantity\nimage\ncolor\nsize" as CartItem
-
-rectangle "Cart\n---\nitems\nsubtotal\ntax\ntotal\nupdatedAt" as Cart
-
-rectangle "Order\n---\nid\nstatus\nsubtotal\ntax\ndiscountTotal\ndiscountCode\ntotal\ncustomerEmail\ncustomerName\npaymentMethod\ncreatedAt\nupdatedAt" as Order
-
-rectangle "ShippingAddress\n---\naddress\napartment\ncity\nzip\nphone" as ShippingAddress
-
-rectangle "Discount\n---\nid\ncode\ntype\nvalue\nstatus\nstartsAt\nendsAt\ncreatedAt\nupdatedAt" as Discount
-
-rectangle "StoreSettings\n---\nid\nstoreName\ncurrency\ntaxRate\nlocale\nupdatedAt" as StoreSettings
-
-rectangle "IndexedDB\nlumens-commerce" as IndexedDB
-rectangle "sessionStorage\nadmin session + checkout draft" as SessionStorage
-rectangle "localStorage\nadmin email + password" as LocalStorage
+package "Persistencia local del navegador" as BrowserStorage {
+  rectangle "IndexedDB\nlumens-commerce" as IndexedDB
+  rectangle "sessionStorage" as SessionStorage
+  rectangle "localStorage" as LocalStorage
+}
 
 Product --> ProductImage : images
-Product --> CartItem : selected as item
-Cart --> CartItem : aggregates
-Order --> CartItem : stores items
-Order --> ShippingAddress : shippingAddress
-Order ..> Discount : optional code
+Product --> CartItem : producto seleccionado
+Cart --> CartItem : agrega items
+Order --> CartItem : guarda items
+Order --> ShippingAddress : direccion de envio
+Order ..> Discount : descuento opcional
 
-IndexedDB .. Product
-IndexedDB .. CartItem
-IndexedDB .. Order
-IndexedDB .. Discount
-IndexedDB .. StoreSettings
-
-note right of Cart
-Cart es un resumen calculado a partir
-de los CartItem persistidos en IndexedDB.
-No existe como store independiente.
+note right of IndexedDB
+Persiste productos, items de carrito,
+pedidos, descuentos y configuracion.
+Funciona como almacenamiento NoSQL del navegador
+basado en object stores.
 end note
 
 note right of SessionStorage
@@ -53,9 +46,21 @@ Guarda las credenciales administrativas
 configuradas en el navegador actual.
 end note
 
-note bottom of IndexedDB
+note bottom of BrowserStorage
 El proyecto no usa una base SQL tradicional.
-La persistencia principal vive en APIs del navegador.
+La persistencia principal vive en APIs del navegador,
+especialmente IndexedDB como almacenamiento NoSQL local por object stores.
+end note
+
+note bottom of Cart
+Cart es un resumen calculado a partir
+de CartItem persistidos.
+No existe como store independiente.
+end note
+
+note bottom of StoreSettings
+StoreSettings representa la configuracion
+local de la tienda.
 end note
 
 @enduml
