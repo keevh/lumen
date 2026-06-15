@@ -1,204 +1,58 @@
-# LUMEN
+# Lumen
 
-LUMEN es un storefront con panel administrativo hecho con **Next.js 16**, **React 19**, **TypeScript** y **Tailwind CSS**. La aplicación funciona como demo local de e-commerce en español, con catálogo, carrito, checkout, ofertas y administración persistida en el navegador.
+## Descripcion general
 
-## Características
+Lumen es una demo funcional de e-commerce en espanol construida con Next.js 16. Reune en un mismo proyecto un storefront publico, un flujo completo de compra y un panel administrativo local para operar catalogo, descuentos, ventas y configuracion.
 
-- Storefront público con rutas en español.
-- Página de categorías con filas horizontales por tipo de prenda.
-- Página de novedades y página real de ofertas.
-- Detalle de producto con variantes por color y talla.
-- Carrito, checkout y confirmación de compra.
-- Panel administrativo para productos, descuentos, ventas y configuración.
-- Persistencia local con **IndexedDB** para catálogo, carrito, pedidos, descuentos y ajustes.
-- Animaciones con **Motion** en flujos públicos y administrativos.
-- Toasts y feedback visual en flujos visibles para el usuario.
+El proyecto esta pensado como una pieza de portafolio y como una base tecnica para explorar flujos comerciales sin depender de un backend real. La persistencia vive en el navegador mediante IndexedDB, `sessionStorage` y `localStorage`, lo que permite simular una operacion coherente de tienda y administracion dentro de una sola aplicacion.
 
-## Rutas principales
+Aunque hoy funciona como demo desplegable, la estructura separa rutas, componentes, modulos de negocio y persistencia de una forma que facilita evolucionar hacia una version con servicios remotos mas adelante.
+
+## Proposito del proyecto
+
+Lumen busca demostrar un flujo comercial end to end dentro de una aplicacion frontend moderna. El proyecto cubre navegacion de catalogo, detalle de producto, carrito, checkout y confirmacion de compra, al tiempo que expone una experiencia administrativa para gestionar productos, descuentos, pedidos y ajustes de tienda.
+
+Tambien sirve para mostrar decisiones de organizacion tecnica utiles en una demo realista: modulos por dominio en `features`, persistencia local desacoplada mediante repositorios, componentes reutilizables y una separacion clara entre la experiencia publica y el panel administrativo.
+
+## Funcionalidades principales
 
 ### Storefront
 
-- `/` Inicio
-- `/categorias` Categorías con preview por tipo de producto
-- `/categorias/[slug]` Listado por categoría
-- `/novedades` Productos destacados
-- `/ofertas` Productos con precio rebajado visible
-- `/productos/[slug]` Detalle de producto
-- `/carrito` Carrito
-- `/pago` Checkout
-- `/pago/exito` Confirmación del pedido
+- `/` inicio con destacados y acceso a ofertas activas.
+- `/categorias` vista editorial por categorias con rails horizontales.
+- `/categorias/[slug]` listado filtrable por categoria.
+- `/novedades` seleccion destacada del catalogo.
+- `/ofertas` productos con descuento visible a partir de `price` y `compareAtPrice`.
+- `/productos/[slug]` detalle de producto con variantes por color, talla y agregado al carrito.
+- `/carrito` resumen editable del pedido.
+- `/pago` checkout con datos de contacto, direccion, metodo de pago y codigo de descuento.
+- `/pago/exito` confirmacion final con identificador del pedido.
 
-### Administración
+### Panel administrativo
 
-- `/admin/login` Acceso administrativo local
-- `/admin` Dashboard
-- `/admin/productos` Gestión de productos y descuentos
-- `/admin/sales` Gestión de ventas y detalle de pedidos
-- `/admin/config` Configuración de tienda y credenciales locales
+- `/admin/login` acceso administrativo local para el navegador actual.
+- `/admin` dashboard con metricas de ventas, inventario y actividad reciente.
+- `/admin/productos` gestion de productos y descuentos.
+- `/admin/sales` consulta de pedidos y actualizacion de estado operativo.
+- `/admin/config` configuracion general de tienda y credenciales locales.
+- Credenciales demo configurables desde el panel de configuracion si se desea cambiar el acceso local.
+
+### Persistencia local
+
+- `IndexedDB` para productos, carrito, pedidos, descuentos y configuracion de tienda.
+- `sessionStorage` para la sesion administrativa local y el borrador temporal del checkout.
+- `localStorage` para correo y contrasena administrativa configurados localmente.
 
 ## Credenciales demo
 
-El acceso administrativo es local y está pensado para demostración en el navegador actual.
+El acceso administrativo es local y esta orientado a demostracion en el navegador actual.
 
 - Correo: `admin@lumen.local`
-- Contraseña: `lumen-demo`
+- Contrasena: `lumen-demo`
 
-Estas credenciales pueden cambiarse desde `/admin/config` y se guardan localmente.
+Estas credenciales siguen confirmadas en el codigo y pueden cambiarse desde `/admin/config`.
 
-## Cómo clonar el proyecto
-
-```bash
-git clone git@github.com:keevh/lumen.git
-cd lumen
-```
-
-Si prefieres HTTPS:
-
-```bash
-git clone https://github.com/keevh/lumen.git
-cd lumen
-```
-
-## Cómo ejecutarlo
-
-Instala dependencias con `pnpm`:
-
-```bash
-pnpm install
-```
-
-Inicia el entorno de desarrollo:
-
-```bash
-pnpm dev
-```
-
-Luego abre:
-
-```text
-http://localhost:3000
-```
-
-## Scripts disponibles
-
-```bash
-pnpm build
-pnpm dev
-pnpm lint
-pnpm start
-pnpm typecheck
-```
-
-## Despliegue
-
-La opción recomendada para este proyecto es **Vercel**.
-
-### Despliegue en Vercel
-
-1. Sube el repositorio a GitHub.
-2. Entra a [Vercel](https://vercel.com/).
-3. Importa el repositorio `keevh/lumen`.
-4. Deja que Vercel detecte **Next.js** automáticamente.
-5. Usa `pnpm` como package manager.
-6. Publica el proyecto.
-
-Configuración esperada:
-
-- Framework: `Next.js`
-- Install command: `pnpm install`
-- Build command: `pnpm build`
-- Output: automático de Next.js
-
-### Importante antes de publicar
-
-Este proyecto funciona hoy como **demo local desplegable**, no como e-commerce multiusuario real.
-
-- Productos, carrito, pedidos, descuentos y configuración se guardan en **IndexedDB**.
-- La información vive en el navegador de cada usuario.
-- Los cambios hechos en `/admin` no se comparten entre navegadores ni dispositivos.
-
-Eso significa que el deploy es ideal para:
-
-- portafolio
-- demo funcional
-- presentación del proyecto
-
-Y no es la arquitectura final para:
-
-- tienda real
-- panel administrativo compartido
-- persistencia global entre usuarios
-
-Si más adelante quieres llevarlo a producción real, el siguiente paso es mover la persistencia a una base remota como Postgres, Supabase o PostgREST.
-
-## Persistencia y datos
-
-La aplicación guarda información en el navegador para simular un flujo completo sin backend real.
-
-- **IndexedDB**:
-  - productos
-  - carrito
-  - pedidos
-  - descuentos
-  - configuración de tienda
-- **sessionStorage**:
-  - sesión administrativa local
-  - borradores temporales del checkout
-- **localStorage**:
-  - correo y contraseña administrativa configurados localmente
-
-La arquitectura de repositorios está preparada para reemplazar la persistencia local por una base remota más adelante.
-
-## Estructura del proyecto
-
-```text
-lumens/
-├── src/
-│   ├── app/
-│   │   ├── admin/
-│   │   ├── carrito/
-│   │   ├── categorias/
-│   │   ├── novedades/
-│   │   ├── ofertas/
-│   │   ├── pago/
-│   │   └── productos/
-│   ├── components/
-│   │   ├── admin/
-│   │   ├── commerce/
-│   │   ├── layout/
-│   │   ├── motion/
-│   │   └── ui/
-│   ├── data/
-│   ├── features/
-│   │   ├── admin/
-│   │   ├── cart/
-│   │   ├── catalog/
-│   │   ├── discounts/
-│   │   ├── orders/
-│   │   └── settings/
-│   ├── lib/
-│   └── shared/
-│       └── storage/
-├── package.json
-├── pnpm-lock.yaml
-└── README.md
-```
-
-## Qué hace cada parte
-
-- `src/app/`: rutas y páginas de Next.js.
-- `src/components/commerce/`: UI del storefront, cards, galerías, detalle de producto y rails.
-- `src/components/admin/`: layout, modales y primitives del panel administrativo.
-- `src/components/motion/`: capa compartida de animaciones con Motion.
-- `src/components/ui/`: toasts, íconos y wrappers visuales reutilizables.
-- `src/features/catalog/`: tipos, pricing, categorías y lógica de consulta del catálogo.
-- `src/features/cart/`: flujo del carrito.
-- `src/features/orders/`: checkout, pedidos y confirmación.
-- `src/features/admin/`: productos, ventas, login y configuración del panel.
-- `src/shared/storage/`: puertos, repositorios y acceso a IndexedDB.
-- `src/data/catalog.ts`: seed inicial del catálogo.
-
-## Tecnologías
+## Stack tecnologico
 
 - Next.js 16
 - React 19
@@ -206,25 +60,95 @@ lumens/
 - Tailwind CSS 4
 - Motion
 - IndexedDB
+- pnpm
 
-## Notas de funcionamiento
+## Arquitectura general
 
-- Las ofertas visibles se determinan por producto usando **precio actual** y **precio anterior**.
-- Los descuentos por código siguen existiendo, pero son distintos de una prenda en oferta.
-- La app está pensada como demo local, no como autenticación o checkout de producción.
+Lumen usa App Router para separar las rutas publicas y administrativas dentro de `src/app`. Las paginas funcionan como entrypoints delgados y delegan la mayor parte del comportamiento en componentes y modulos de dominio.
 
-## Contribuir
+La logica del negocio se organiza en `src/features`, con modulos para catalogo, carrito, pedidos, descuentos, configuracion y administracion. Los componentes reutilizables viven en `src/components`, mientras que `src/shared/storage` concentra la capa de persistencia local y la creacion de repositorios del navegador.
 
-Si quieres proponer mejoras o corregir algo:
+Hay una decision importante en el flujo de datos: varias vistas publicas arrancan con datos seed desde `src/data/catalog.ts`, y luego algunos clientes se hidratan con el estado almacenado en IndexedDB. Eso permite tener una primera carga estable y, al mismo tiempo, reflejar cambios locales hechos desde el panel administrativo en la experiencia interactiva del navegador actual.
 
-1. Abre un issue con el problema o idea.
-2. Crea un pull request con el cambio.
+## Decisiones tecnicas
 
-Antes de enviar cambios, valida al menos:
+- La persistencia local esta encapsulada en una capa propia sobre IndexedDB dentro de `src/shared/storage`, en lugar de repartir acceso directo a la API nativa por toda la aplicacion.
+- El acceso a datos esta desacoplado mediante repositorios por dominio para catalogo, carrito, pedidos, descuentos y configuracion.
+- La organizacion principal del codigo sigue modulos de negocio en `src/features`, lo que mantiene juntos tipos, logica y flujos de cada area.
+- El storefront publico y el panel administrativo comparten parte del modelo de datos, pero se mantienen separados por rutas, componentes y flujos de interfaz.
+- El catalogo combina un seed inicial en `src/data/catalog.ts` con persistencia local en navegador para la operacion interactiva.
+- La creacion de repositorios del navegador esta centralizada mediante `createBrowserRepositories()` y `getBrowserRepositories()`.
+- La estructura actual deja preparada una migracion futura hacia persistencia remota sin rehacer por completo la aplicacion.
 
-- `pnpm lint`
-- `pnpm typecheck`
+## Estructura del proyecto
 
-## Autor
+```txt
+src/
+├── app/                 # Rutas y entrypoints de Next.js
+├── components/          # Componentes visuales reutilizables
+├── data/                # Datos seed para la primera carga
+├── features/            # Modulos de negocio por dominio
+├── lib/                 # Utilidades compartidas
+└── shared/storage/      # Persistencia local y repositorios de navegador
+```
 
-Kevin Gallardo - [GitHub](https://github.com/keevh)
+- `src/app`: define las rutas publicas y administrativas, junto con algunos aliases en ingles que redirigen a las rutas canonicas en espanol.
+- `src/components`: contiene piezas reutilizables para storefront, panel administrativo, layout, animacion y UI compartida.
+- `src/data`: guarda el catalogo seed y datos auxiliares usados para la primera carga y el seeding inicial del almacenamiento local.
+- `src/features`: agrupa la logica del negocio por dominio, incluyendo tipos, pricing, checkout, metricas administrativas y reglas de consulta.
+- `src/lib`: concentra utilidades pequenas de formato usadas por varias vistas.
+- `src/shared/storage`: implementa la persistencia local, la apertura de IndexedDB, los stores, los helpers de acceso y los repositorios del navegador.
+
+## Modelo de datos
+
+Las entidades principales confirmadas en el codigo son estas:
+
+- `Product`: producto del catalogo con `id`, `slug`, `displayName`, `description`, `price`, `compareAtPrice`, `stock`, `category`, `colors`, `sizes`, `images`, `status`, fechas y metadatos visuales.
+- `ProductImage`: imagen asociada a un producto con `url`, `alt`, `position` y color opcional.
+- `CartItem`: item persistido en carrito con producto, variante, cantidad, precio unitario, color, talla e imagen.
+- `Cart`: resumen calculado del carrito con `items`, `subtotal`, `tax`, `total` y `updatedAt`.
+- `Order`: pedido generado en checkout con articulos, montos, codigo de descuento, datos del cliente, direccion de envio, metodo de pago y estado.
+- `Discount`: descuento por codigo con tipo (`percentage` o `fixed`), valor, estado y fechas opcionales.
+- `StoreSettings`: configuracion local de tienda con nombre, moneda, tasa de impuesto, locale y fecha de actualizacion.
+- Sesion administrativa local: estado efimero guardado en `sessionStorage` para controlar el acceso al panel en el navegador actual.
+
+## Diagramas
+
+La documentacion tecnica del proyecto incluye tres diagramas PlantUML dentro de `docs/diagrams/`.
+
+- `docs/diagrams/database-model.puml`: representa el modelo de datos persistido localmente en navegador, incluyendo entidades y relaciones principales.
+- `docs/diagrams/system-architecture.puml`: muestra el flujo entre usuario, administrador, aplicacion Next.js, modulos de dominio, repositorios locales y storages del navegador.
+- `docs/diagrams/project-structure.puml`: resume como se relacionan las carpetas principales del proyecto en lugar de limitarse a repetir el arbol.
+
+## Estado del proyecto
+
+Lumen se encuentra en un estado de demo funcional de e-commerce con persistencia local. El sistema permite recorrer el flujo publico de compra, administrar productos y descuentos, registrar pedidos y operar una configuracion de tienda desde el navegador.
+
+No es una arquitectura final para una tienda con datos compartidos entre usuarios o dispositivos. Su valor actual esta en demostrar experiencia de producto, organizacion tecnica y flujos comerciales completos dentro de una aplicacion desplegable y autocontenida.
+
+## Ejecucion local
+
+```bash
+pnpm install
+pnpm dev
+```
+
+Aplicacion disponible en `http://localhost:3000`.
+
+### Scripts disponibles
+
+```bash
+pnpm dev
+pnpm build
+pnpm start
+pnpm lint
+pnpm typecheck
+```
+
+## Despliegue
+
+Lumen puede desplegarse sin friccion en Vercel porque es una aplicacion Next.js sin dependencias de infraestructura externa para su funcionamiento actual. El resultado es util como demo publica, presentacion tecnica o pieza de portafolio.
+
+La limitacion deliberada es que la persistencia sigue siendo local al navegador. Eso significa que productos editados desde el panel, pedidos creados en checkout, descuentos y configuracion no se comparten entre usuarios ni entre dispositivos. Cada navegador mantiene su propio estado.
+
+Si el proyecto evolucionara hacia un escenario productivo real, el siguiente paso natural seria reemplazar la persistencia local por una base de datos remota y una capa de servicios o backend que permita autenticacion real, administracion compartida y consistencia global de datos.

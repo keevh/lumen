@@ -1,0 +1,61 @@
+@startuml
+title Lumen - Modelo de datos persistido localmente
+
+skinparam shadowing false
+skinparam linetype ortho
+
+rectangle "Product\n---\nid\nslug\ndisplayName\ndescription\nprice\ncompareAtPrice\nstock\ncategory\nstatus\ncreatedAt\nupdatedAt\nname\nmaterial\ncolor\nimage\nbadge" as Product
+
+rectangle "ProductImage\n---\nurl\nalt\nposition\ncolor" as ProductImage
+
+rectangle "CartItem\n---\nid\nproductId\nslug\nname\nvariant\nunitPrice\nprice\nquantity\nimage\ncolor\nsize" as CartItem
+
+rectangle "Cart\n---\nitems\nsubtotal\ntax\ntotal\nupdatedAt" as Cart
+
+rectangle "Order\n---\nid\nstatus\nsubtotal\ntax\ndiscountTotal\ndiscountCode\ntotal\ncustomerEmail\ncustomerName\npaymentMethod\ncreatedAt\nupdatedAt" as Order
+
+rectangle "ShippingAddress\n---\naddress\napartment\ncity\nzip\nphone" as ShippingAddress
+
+rectangle "Discount\n---\nid\ncode\ntype\nvalue\nstatus\nstartsAt\nendsAt\ncreatedAt\nupdatedAt" as Discount
+
+rectangle "StoreSettings\n---\nid\nstoreName\ncurrency\ntaxRate\nlocale\nupdatedAt" as StoreSettings
+
+rectangle "IndexedDB\nlumens-commerce" as IndexedDB
+rectangle "sessionStorage\nadmin session + checkout draft" as SessionStorage
+rectangle "localStorage\nadmin email + password" as LocalStorage
+
+Product --> ProductImage : images
+Product --> CartItem : selected as item
+Cart --> CartItem : aggregates
+Order --> CartItem : stores items
+Order --> ShippingAddress : shippingAddress
+Order ..> Discount : optional code
+
+IndexedDB .. Product
+IndexedDB .. CartItem
+IndexedDB .. Order
+IndexedDB .. Discount
+IndexedDB .. StoreSettings
+
+note right of Cart
+Cart es un resumen calculado a partir
+de los CartItem persistidos en IndexedDB.
+No existe como store independiente.
+end note
+
+note right of SessionStorage
+Guarda la sesion administrativa local
+y el borrador temporal del checkout.
+end note
+
+note right of LocalStorage
+Guarda las credenciales administrativas
+configuradas en el navegador actual.
+end note
+
+note bottom of IndexedDB
+El proyecto no usa una base SQL tradicional.
+La persistencia principal vive en APIs del navegador.
+end note
+
+@enduml

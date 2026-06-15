@@ -1,0 +1,77 @@
+@startuml
+title Lumen - Estructura del proyecto
+
+skinparam shadowing false
+skinparam linetype ortho
+
+package "src/app" as App {
+  [Rutas publicas]
+  [Rutas admin]
+  [Redirect aliases]
+}
+
+package "src/components" as Components {
+  [commerce]
+  [admin]
+  [layout]
+  [motion]
+  [ui]
+}
+
+package "src/features" as Features {
+  [catalog]
+  [cart]
+  [orders]
+  [discounts]
+  [settings]
+  [admin]
+}
+
+package "src/shared/storage" as Storage {
+  [storage-port.ts]
+  [repositories.ts]
+  [browser-db.ts]
+  [useBrowserRepositories.ts]
+  [cart-events.ts]
+}
+
+package "src/data" as Data {
+  [catalog.ts]
+  [cart.ts]
+  [admin.ts]
+}
+
+package "src/lib" as Lib {
+  [format.ts]
+}
+
+App --> Components : compone UI y layout
+App --> Features : delega flujos de negocio
+
+Components --> Features : consume tipos y logica
+Components --> Storage : clientes del navegador
+Components --> Lib : formato y helpers
+
+Features --> Data : seed y datos iniciales
+Features --> Lib : utilidades compartidas
+Features --> Storage : persistencia local
+
+Storage --> Data : seeding inicial
+
+note right of App
+Entry points delgados con App Router.
+Las paginas delegan el comportamiento
+en componentes y modulos de dominio.
+end note
+
+note bottom of Features
+La organizacion principal es por dominio
+de negocio, no por tipo tecnico global.
+end note
+
+note bottom of Storage
+Concentra contratos, creacion centralizada
+de repositorios y adaptadores sobre IndexedDB.
+end note
+
+@enduml

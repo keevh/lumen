@@ -1,0 +1,76 @@
+@startuml
+title Lumen - Arquitectura general
+
+left to right direction
+skinparam shadowing false
+skinparam linetype ortho
+
+actor Usuario
+actor Administrador
+
+rectangle "Aplicacion Next.js 16" as NextApp {
+  rectangle "Storefront publico\n/src/app, commerce, layout" as Storefront
+  rectangle "Panel administrativo\n/src/app/admin, components/admin" as AdminPanel
+}
+
+rectangle "Modulos de dominio\n/src/features" as Features {
+  rectangle "Catalogo" as Catalog
+  rectangle "Carrito" as Cart
+  rectangle "Pedidos" as Orders
+  rectangle "Descuentos" as Discounts
+  rectangle "Settings" as Settings
+  rectangle "Admin" as AdminFeature
+}
+
+rectangle "Persistencia desacoplada\n/src/shared/storage" as StorageLayer {
+  rectangle "createBrowserRepositories()\ngetBrowserRepositories()" as RepoFactory
+  rectangle "Repositorios por dominio\ncatalog, cart, orders, discounts, settings" as Repositories
+  rectangle "Adaptadores sobre IndexedDB\nbrowser-db.ts" as BrowserDb
+}
+
+database "IndexedDB\nlumens-commerce" as IndexedDB
+collections "sessionStorage\nadmin session\ncheckout draft" as SessionStorage
+collections "localStorage\nadmin email\nadmin password" as LocalStorage
+collections "Seed catalog\nsrc/data/catalog.ts" as SeedCatalog
+
+Usuario --> Storefront
+Administrador --> AdminPanel
+
+Storefront --> Catalog
+Storefront --> Cart
+Storefront --> Orders
+Storefront --> Discounts
+
+AdminPanel --> AdminFeature
+AdminPanel --> Catalog
+AdminPanel --> Discounts
+AdminPanel --> Orders
+AdminPanel --> Settings
+
+Catalog --> SeedCatalog : render inicial
+Catalog --> RepoFactory : hidratacion local
+Cart --> RepoFactory
+Orders --> RepoFactory
+Discounts --> RepoFactory
+Settings --> RepoFactory
+AdminFeature --> RepoFactory
+
+RepoFactory --> Repositories
+Repositories --> BrowserDb
+BrowserDb --> IndexedDB
+
+AdminPanel --> SessionStorage : sesion local
+Storefront --> SessionStorage : borrador checkout
+AdminPanel --> LocalStorage : credenciales locales
+
+note bottom of Storefront
+Varias vistas publicas comienzan con
+datos seed y luego se rehidratan desde IndexedDB.
+end note
+
+note bottom of Repositories
+El acceso a datos se expone mediante repositorios
+por dominio, no mediante acceso directo a IndexedDB.
+end note
+
+@enduml
